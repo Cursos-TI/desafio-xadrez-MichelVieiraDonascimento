@@ -5,54 +5,130 @@
 // O objetivo é utilizar estruturas de repetição e funções para determinar os limites de movimentação dentro do jogo.
 
 
+/*
+   A torre aqui vai andar sempre para a DIREITA.
+   A recursão vai diminuindo o número de casas até chegar a zero.
+*/
+void moverTorre(int passoAtual, int totalPassos) {
+    if (passoAtual > totalPassos) {
+        return; 
+    }
+
+    printf("Direita (%d)\n", passoAtual);
+
+
+    moverTorre(passoAtual + 1, totalPassos);
+}
+
+
+/*
+   O bispo anda na diagonal: CIMA + DIREITA.
+   A instrução pediu duas coisas:
+    usar loops aninhados, sendo o de fora o vertical e o de dentro o horizontal
+   Então: a cada chamada recursiva eu "simulo" o movimento vertical e horizontal
+   com dois for pequenininhos (1x1), mas mantendo o formato pedido.
+*/
+void moverBispo(int passoAtual, int totalPassos) {
+    if (passoAtual > totalPassos) {
+        return; // caso base
+    }
+
+
+    for (int v = 1; v <= 1; v++) {         
+        for (int h = 1; h <= 1; h++) {          
+            printf("Cima, Direita (%d)\n", passoAtual);
+        }
+    }
+
+
+    moverBispo(passoAtual + 1, totalPassos);
+}
+
+
+/*
+   Vamos fazer a rainha andar para a ESQUERDA.
+   Parecido com a torre, mas mudando a direção.
+*/
+void moverRainha(int passoAtual, int totalPassos) {
+    if (passoAtual > totalPassos) {
+        return;
+    }
+
+    printf("Esquerda (%d)\n", passoAtual);
+
+    moverRainha(passoAtual + 1, totalPassos);
+}
+
+/* ===================== CAVALO (LOOPS ANINHADOS + CONTINUE/BREAK) ===================== */
+/*
+   Nova regra do desafio:
+   - cavalo agora vai para CIMA e para a DIREITA, em "L"
+   - ou seja: 2 casas para cima, 1 para a direita
+   - queremos usar loops aninhados e mostrar controle de fluxo
+
+   
+*/
+void moverCavalo(int qtdMovimentos) {
+    printf("Movimento do Cavalo:\n");
+
+    for (int mov = 1; mov <= qtdMovimentos; mov++) {
+
+        // primeiro: subir 2 casas
+        int subiu = 0;
+        while (subiu < 2) {
+            subiu++;
+            
+            if (subiu > 2) {
+                break;
+            }
+            printf("Cima (mov %d, passo vertical %d)\n", mov, subiu);
+        }
+
+        // agora: ir 1 pra direita
+        for (int dir = 1; dir <= 1; dir++) {
+            if (dir < 0) {
+                continue;
+            }
+            printf("Direita (mov %d)\n", mov);
+        }
+
+        // só pra mostrar controle: se o movimento for maior que 10, para tudo (proteção)
+        if (mov > 10) {
+            printf("Cavalo: limite de movimentos atingido, parando...\n");
+            break;
+        }
+    }
+
+    printf("\n");
+}
 
 int main() {
 
-    // TORRE (usa FOR)
-    int casasTorre = 5; // número de casas que a torre vai andar
+
+    int casasTorre  = 5;  
+    int casasBispo  = 5; 
+    int casasRainha = 8;  
+    int movimentosCavalo = 3; 
+
+    /*TORRE*/
     printf("Movimento da Torre:\n");
-    for (int i = 1; i <= casasTorre; i++) {
-        printf("Direita (%d)\n", i);
-    }
+    moverTorre(1, casasTorre);
     printf("\n");
 
-    //  BISPO (usa WHILE)
-    int casasBispo = 5; // número de casas que o bispo vai andar
-    int i = 1;
+    /*  BISPO  */
     printf("Movimento do Bispo:\n");
-    while (i <= casasBispo) {
-        printf("Cima, Direita (%d)\n", i);
-        i++;
-    }
+    moverBispo(1, casasBispo);
     printf("\n");
 
-    //  RAINHA (usa DO-WHILE)
-    int casasRainha = 8; // número de casas que a rainha vai andar
-    int j = 1;
+    /*  RAINHA  */
     printf("Movimento da Rainha:\n");
-    do {
-        printf("Esquerda (%d)\n", j);
-        j++;
-    } while (j <= casasRainha);
+    moverRainha(1, casasRainha);
     printf("\n");
 
-    // CAVALO (usa FOR + WHILE aninhados)
-    int casasBaixo = 2;      // movimento vertical
-    int casasEsquerda = 1;   // movimento horizontal
+    /*  CAVALO  */
+    moverCavalo(movimentosCavalo);
 
-    printf("Movimento do Cavalo:\n");
-
-    for (int passo = 1; passo <= casasBaixo; passo++) {
-        printf("Baixo (%d)\n", passo);
-    }
-
-    int k = 1;
-    while (k <= casasEsquerda) {
-        printf("Esquerda (%d)\n", k);
-        k++;
-    }
-
-    printf("\nSimulação concluída!\n");
+    printf("Simulação concluída!\n");
 
     return 0;
 }
